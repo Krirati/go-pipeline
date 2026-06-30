@@ -30,16 +30,14 @@ pipeline {
         }
 
         stage('Unit Test + Coverage') {
-            stage('Unit Test + Coverage') {
-                steps {
-                    sh '''
-                    docker run --rm \
-                    -v "$WORKSPACE:/app" \
-                    -w /app \
-                    myapp-test \
-                    sh -c "pwd && ls -la && ls -la scripts && cat scripts/test.sh"
-                    '''
-                }
+            steps {
+                sh '''
+                docker run --rm \
+                -v "$WORKSPACE:/app" \
+                -w /app \
+                myapp-test \
+                sh -c "pwd && ls -la && ls -la scripts && cat scripts/test.sh"
+                '''
             }
         }
 
