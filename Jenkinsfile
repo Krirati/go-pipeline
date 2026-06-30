@@ -25,7 +25,7 @@ pipeline {
             steps {
                 sh '''
                 docker run --rm myapp-test sh -c "
-                    sh scripts/test.sh &&
+                    sh scripts/test.sh 
                 "
                 '''
             }
