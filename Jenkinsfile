@@ -39,6 +39,7 @@ pipeline {
     post {
         always {
             echo 'Cleaning workspace'
+            cleanWs()
             sh 'docker rmi myapp-test || true'
         }
 
