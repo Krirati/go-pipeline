@@ -14,7 +14,13 @@ pipeline {
         }
         stage('Build Test Image') {
             steps {
-                sh 'docker build -f Dockerfile.test -t myapp-test .'
+                sh '''
+                    docker run --rm \
+                    -v "$WORKSPACE:/app" \
+                    -w /app \
+                    myapp-test \
+                    sh scripts/test.sh
+                '''
             }
         }
 
