@@ -15,11 +15,9 @@ pipeline {
         stage('Build Test Image') {
             steps {
                 sh '''
-                    docker run --rm \
-                    -v "$WORKSPACE:/app" \
-                    -w /app \
-                    myapp-test \
-                    sh scripts/test.sh
+                    docker build \
+                        -f Dockerfile.test \
+                        -t myapp-test .
                 '''
             }
         }
@@ -27,11 +25,11 @@ pipeline {
         stage('Unit Test + Coverage') {
             steps {
                 sh '''
-                docker run --rm \
-                    -v $PWD:/app \
-                    -w /app \
-                    myapp-test \
-                    sh scripts/test.sh
+                    docker run --rm \
+                        -v "$WORKSPACE:/app" \
+                        -w /app \
+                        myapp-test \
+                        sh scripts/test.sh
                 '''
             }
         }
