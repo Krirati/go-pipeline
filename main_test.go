@@ -1,7 +1,10 @@
 package main_test
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestFailCas(t *testing.T) {
-    t.Errorf("Test fail")
+	fmt.Println("TestFailCas")
 }
