@@ -12,6 +12,15 @@ pipeline {
                 checkout scm
             }
         }
+        stage('Debug') {
+            steps {
+                sh '''
+                    pwd
+                    ls -la
+                    ls -R
+                '''
+            }
+        }
         stage('Build Test Image') {
             steps {
                 sh '''
