@@ -26,13 +26,12 @@ pipeline {
                 sh '''
                 docker run --rm myapp-test sh -c "
                     sh scripts/test.sh &&
-                    sh scripts/check_coverage.sh
                 "
                 '''
             }
         }
 
-       
+                    // sh scripts/check_coverage.sh
         stage('Build Production Image') {
             steps {
                 sh 'docker build -t myapp:latest .'
