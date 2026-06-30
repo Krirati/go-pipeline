@@ -24,17 +24,15 @@ pipeline {
         stage('Unit Test + Coverage') {
             steps {
                 sh '''
-                docker run --rm \
-                    -v "$WORKSPACE:/app" \
-                    -w /app \
-                    myapp-test \
-                    sh -c "
-                        sh scripts/test.sh &&
-                        sh scripts/check_coverage.sh
-                    "
+                docker run --rm myapp-test sh -c "
+                    sh scripts/test.sh &&
+                    sh scripts/check_coverage.sh
+                "
                 '''
             }
         }
+
+       
         stage('Build Production Image') {
             steps {
                 sh 'docker build -t myapp:latest .'
