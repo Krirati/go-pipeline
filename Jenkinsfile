@@ -36,7 +36,7 @@ pipeline {
 
         stage('Validate Coverage') {
             steps {
-                sh './scripts/check_coverage.sh'
+                sh 'sh ./scripts/check_coverage.sh'
             }
         }
         stage('Build Production Image') {
