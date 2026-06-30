@@ -1,6 +1,11 @@
 pipeline {
     agent any
     stages {
+        stage('Clean Workspace') {
+            steps {
+                cleanWs()
+            }
+        }
         stage('Checkout SCM') {
             steps {
                 echo 'Checkout source code'
