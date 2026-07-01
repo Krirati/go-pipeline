@@ -1,0 +1,17 @@
+services:
+  app:
+    build:
+      context: .
+    working_dir: /app
+    volumes:
+      - .:/app
+  test:
+    build:
+      context: .
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: >
+      sh ./scripts/go-test.sh
+
+    

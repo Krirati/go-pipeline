@@ -13,25 +13,27 @@ pipeline {
             }
         }
         
-        stage('Build Test Image') {
-            steps {
-                sh '''
-                    docker build -f Dockerfile.test -t myapp-test .
-                '''
-            }
-        }
+        // stage('Build Test Image') {
+        //     steps {
+        //         sh '''
+        //             docker build -f Dockerfile.test -t myapp-test .
+        //         '''
+        //     }
+        // }
 
         stage('Unit Test + Coverage') {
             steps {
-                sh '''
-                docker run --rm myapp-test sh -c "
-                    sh scripts/test.sh 
-                "
-                '''
+                // sh '''
+                // docker run --rm myapp-test sh -c "
+                //     sh scripts/test.sh
+                // "
+                // '''
+                sh 'docker compose run -f docker-compose.test.yaml --rm test'
             }
         }
 
-                    // sh scripts/check_coverage.sh
+                    sh scripts/check_coverage.sh
+    //    
         stage('Build Production Image') {
             steps {
                 sh 'docker build -t myapp:latest .'
