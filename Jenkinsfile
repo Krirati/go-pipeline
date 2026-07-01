@@ -28,7 +28,7 @@ pipeline {
                 //     sh scripts/test.sh
                 // "
                 // '''
-                sh 'docker compose run -f docker-compose.test.yaml --rm test'
+                sh 'docker compose -f docker-compose.test.yaml run --rm test'
             }
         }
 
