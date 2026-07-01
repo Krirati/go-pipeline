@@ -28,7 +28,7 @@ pipeline {
                 //     sh scripts/test.sh
                 // "
                 // '''
-                echo docker-compose version
+                 docker-compose version
                 sh 'docker compose -f docker-compose.test.yaml run --rm test'
             }
         }
