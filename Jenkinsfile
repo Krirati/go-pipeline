@@ -40,7 +40,7 @@ pipeline {
             steps {
                 sh '''
                 docker run --rm myapp-test sh -c "
-                    sh scripts/go-test.sh
+                    sh scripts/go-test.sh && sh scripts/coverage.sh
                 "
                 '''
                 // sh 'dockฝer compose -f docker-compose.test.yaml run --rm test'

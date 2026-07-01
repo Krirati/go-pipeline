@@ -2,7 +2,4 @@
 set -e
 
 echo "Run unit test"
-go test ./... \
-  -coverprofile=coverage.out \
-  -covermode=atomic \
-  -v
+go test -race -covermode=atomic -coverprofile=coverage.out ./...
