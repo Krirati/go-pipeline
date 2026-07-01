@@ -21,6 +21,21 @@ pipeline {
         //     }
         // }
 
+        stage('Debug Docker') {
+            steps {
+                sh '''
+                    which docker
+                    docker --version
+
+                    echo "===== compose ====="
+                    docker compose version || true
+
+                    echo "===== docker-compose ====="
+                    docker-compose version || true
+                '''
+            }
+        }
+
         stage('Unit Test + Coverage') {
             steps {
                 // sh '''
@@ -28,7 +43,6 @@ pipeline {
                 //     sh scripts/test.sh
                 // "
                 // '''
-                 docker-compose version
                 sh 'docker compose -f docker-compose.test.yaml run --rm test'
             }
         }
