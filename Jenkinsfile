@@ -13,13 +13,13 @@ pipeline {
             }
         }
         
-        // stage('Build Test Image') {
-        //     steps {
-        //         sh '''
-        //             docker build -f Dockerfile.test -t myapp-test .
-        //         '''
-        //     }
-        // }
+        stage('Build Test Image') {
+            steps {
+                sh '''
+                    docker build -f Dockerfile.test -t myapp-test .
+                '''
+            }
+        }
 
         stage('Debug Docker') {
             steps {
@@ -38,12 +38,12 @@ pipeline {
 
         stage('Unit Test + Coverage') {
             steps {
-                // sh '''
-                // docker run --rm myapp-test sh -c "
-                //     sh scripts/test.sh
-                // "
-                // '''
-                sh 'docker compose -f docker-compose.test.yaml run --rm test'
+                sh '''
+                docker run --rm myapp-test sh -c "
+                    sh scripts/go-test.sh
+                "
+                '''
+                // sh 'dockฝer compose -f docker-compose.test.yaml run --rm test'
             }
         }
 
