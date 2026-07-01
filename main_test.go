@@ -7,4 +7,5 @@ import (
 
 func TestFailCas(t *testing.T) {
 	fmt.Println("TestFailCas")
+    t.Errorf("error")
 }
