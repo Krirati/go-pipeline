@@ -86,7 +86,7 @@ coverage=$(go tool cover -func=coverage.out \
     | awk '/total:/ { gsub("%","",$3); print $3 }')
 
 echo "Total Coverage = ${coverage}%"
-
+rm -rf coverage.out
 if [ "$failed_count" -gt 0 ]; then
     echo "❌ Coverage validation failed"
     exit 1
