@@ -2,8 +2,9 @@
 set -e
 
 MIN_COVERAGE=80
+
 IGNORE_FILE="scripts/coverage.ignore"
-FILTERED_COVERAGE="/tmp/coverage.filtered.$$"
+FILTERED_COVERAGE="$(mktemp)"
 
 cleanup() {
     rm -f "$FILTERED_COVERAGE"
@@ -11,7 +12,7 @@ cleanup() {
 trap cleanup EXIT INT TERM
 
 #
-# Step 1 : Filter coverage.out
+# Filter ignored files
 #
 awk -v ignore_file="$IGNORE_FILE" '
 BEGIN {
@@ -25,78 +26,92 @@ BEGIN {
 
         ignore[++n] = line
     }
+
     close(ignore_file)
 }
 
-NR==1 {
+NR == 1 {
     print
     next
 }
 
 {
-    split($1,a,":")
-    file=a[1]
+    split($1, a, ":")
+    file = a[1]
 
-    base=file
-    sub(/^.*\//,"",base)
+    base = file
+    sub(/^.*\//, "", base)
 
-    skip=0
-    for(i=1;i<=n;i++){
-        if(file==ignore[i] ||
-           base==ignore[i] ||
-           index(file,ignore[i])==1){
-            skip=1
+    skip = 0
+
+    for (i = 1; i <= n; i++) {
+        if (file == ignore[i] ||
+            base == ignore[i] ||
+            index(file, ignore[i]) == 1) {
+            skip = 1
             break
         }
     }
 
-    if(!skip)
+    if (!skip)
         print
 }
 ' coverage.out > "$FILTERED_COVERAGE"
 
-#
-# Step 2 : Files ต่ำกว่า Threshold
-#
-echo "========================================="
-echo "Files below ${MIN_COVERAGE}%"
-echo "========================================="
+echo
+echo "========== Files below ${MIN_COVERAGE}% =========="
 
-go tool cover -func="$FILTERED_COVERAGE" |
 awk -v min="$MIN_COVERAGE" '
-/total:/ {next}
+NR == 1 { next }
 
 {
-    gsub("%","",$3)
+    split($1, a, ":")
+    file = a[1]
 
-    if($3<min)
-        printf "%-60s %6.1f%%\n",$1,$3
+    statements = $2
+    count = $3
+
+    total[file] += statements
+
+    if (count > 0)
+        covered[file] += statements
 }
-'
+
+END {
+
+    low = 0
+
+    printf "%-60s %10s\n", "FILE", "COVERAGE"
+
+    for (f in total) {
+
+        pct = covered[f] * 100 / total[f]
+
+        if (pct < min) {
+            printf "%-60s %8.1f%%\n", f, pct
+            low++
+        }
+    }
+
+    if (low == 0)
+        print "No file below threshold."
+}
+' "$FILTERED_COVERAGE"
 
 echo
 
-#
-# Step 3 : Total Coverage
-#
-coverage=$(
-go tool cover -func="$FILTERED_COVERAGE" |
-awk '/total:/{
-    gsub("%","",$3)
-    print $3
-}')
+TOTAL=$(go tool cover -func="$FILTERED_COVERAGE" \
+    | awk '/total:/ {gsub("%","",$3); print $3}')
 
-echo "========================================="
-echo "Total Coverage : ${coverage}%"
+echo "========== Summary =========="
+echo "Total Coverage : ${TOTAL}%"
 echo "Threshold      : ${MIN_COVERAGE}%"
 
-if awk -v c="$coverage" -v min="$MIN_COVERAGE" \
-'BEGIN{exit !(c>=min)}'
+if awk -v c="$TOTAL" -v min="$MIN_COVERAGE" \
+'BEGIN { exit !(c >= min) }'
 then
     echo "Status         : PASS"
 else
     echo "Status         : FAIL"
     exit 1
 fi
-
-echo "========================================="

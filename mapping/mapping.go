@@ -5,9 +5,12 @@ type Mock struct {
 	Value float64
 }
 
-func MapToMock(name string, value float64) Mock {
-	return Mock{
-		A:     name,
+func MapToMock(name *string, value float64) *Mock {
+	if name == nil {
+        return nil
+    }
+    return &Mock{
+		A:     *name,
 		Value: value,
 	}
 }

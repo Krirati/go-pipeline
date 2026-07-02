@@ -1,4 +1,1 @@
 main.go 
-internal/config/config.go
-internal/mock/mock.go
-internal/generated/swagger.go

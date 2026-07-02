@@ -7,7 +7,8 @@ import (
 )
 
 func TestMapping(t *testing.T) {
-	s := mapping.MapToMock("aa", 1.0)
+	mock := "aa"
+	s := mapping.MapToMock(&mock, 1.0)
 
 	if s.A != "aa" {
 		t.Errorf("Expect AA but got %s", s.A)
