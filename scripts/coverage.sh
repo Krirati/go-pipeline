@@ -59,7 +59,7 @@ NR == 1 {
 ' coverage.out > "$FILTERED_COVERAGE"
 
 echo
-echo "========== Files below ${MIN_COVERAGE}% =========="
+echo "========== Files below ${MIN_COVERAGE}% 🗂️ =========="
 
 awk -v min="$MIN_COVERAGE" '
 NR == 1 { next }
@@ -103,7 +103,7 @@ echo
 TOTAL=$(go tool cover -func="$FILTERED_COVERAGE" \
     | awk '/total:/ {gsub("%","",$3); print $3}')
 
-echo "========== Summary =========="
+echo "========== Summary 📝 =========="
 echo "Total Coverage : ${TOTAL}%"
 echo "Threshold      : ${MIN_COVERAGE}%"
 
