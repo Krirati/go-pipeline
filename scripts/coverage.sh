@@ -111,7 +111,9 @@ if awk -v c="$TOTAL" -v min="$MIN_COVERAGE" \
 'BEGIN { exit !(c >= min) }'
 then
     echo "Status         : PASS"
+    rm -rf coverage.out
 else
     echo "Status         : FAIL"
+    rm -rf coverage.out
     exit 1
 fi
